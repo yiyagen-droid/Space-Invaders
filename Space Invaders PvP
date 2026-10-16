@@ -1,0 +1,55 @@
+import pygame
+pygame.init()
+
+WIDTH = 1400
+HEIGHT = 800
+TITLE = "Space Invaders"
+
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption(TITLE)
+
+space_bg = pygame.image.load("pygame projects/images/space2.png")
+space_bg = pygame.transform.scale(space_bg, (1600, 900))
+yellow_ship = pygame.image.load("pygame projects/images/spaceinvader_yellow.png")
+red_ship = pygame.image.load("pygame projects/images/spaceinvader_red.png")
+
+angle = 0
+
+class Ship(pygame.sprite.Sprite):
+    def __init__(self, i, x, y, angle):
+        super().__init__()
+        self.image = i
+        self.image = pygame.transform.scale(self.image, (90, 60))
+        self.image = pygame.transform.rotate(self.image, angle)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+ship1 = Ship(yellow_ship, WIDTH/6, HEIGHT/2 - 50, 90)
+ship2 = Ship(red_ship, (WIDTH/6) * 5, HEIGHT/2 - 50, 270)
+sprite_group = pygame.sprite.Group()
+sprite_group.add(ship1, ship2)
+
+play = True
+
+while play == True:
+    ship1_health = 10
+    ship2_health = 10
+
+    screen.blit(space_bg, (0, 0))
+    sprite_group.draw(screen)
+    pygame.draw.line(screen, "black", (WIDTH/2, HEIGHT), (WIDTH/2, 0), 20)
+
+    font1 = pygame.font.SysFont("claibri", int(WIDTH/20))
+    text1 = font1.render(f"Health: {ship1_health}", True, "white")
+    screen.blit(text1, (WIDTH/20, HEIGHT/20))
+
+    font2 = pygame.font.SysFont("claibri", int(WIDTH/20))
+    text2 = font2.render(f"Health: {ship2_health}", True, "white")
+    screen.blit(text1, ((WIDTH/20) * 15.5, HEIGHT/20))
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            play = False
+
+    pygame.display.update()
